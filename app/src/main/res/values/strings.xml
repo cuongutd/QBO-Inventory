@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">QBO Inventory</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password (optional)</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+    <string name="consumerKey">qyprdrXItMdZB4cIEZRwxCWx9aCZao</string>
+    <string name="consumerSecret">RJOJ3MTCL2A3Ao2xvkO9bBO9jEyKlbyRRuKb0Tuv</string>
+    <string name="companyId">1346739435</string>
+    <string name="title_activity_scan">Inventory Re-Stock</string>
+    <string name="upcdbkey">8151b7ba6a0f5bdecabbb1c589848ce4</string>
+    <string name="loading">Loading....</string>
+</resources>

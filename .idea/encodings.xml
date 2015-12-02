@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/google/zxing/integration/android/IntentIntegrator.java" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/google/zxing/integration/android/IntentResult.java" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/tb2g/qboinventory/service/oauth/CompanyRequestTokenSecret.java" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/tb2g/qboinventory/service/oauth/OAuthException.java" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/tb2g/qboinventory/service/oauth/OAuthInfoProvider.java" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/libs/qbo-sdk/ipp-java-qbapihelper-1.2.1-jar-with-dependencies.jar" charset="windows-1252" />
+    <file url="PROJECT" charset="UTF-8" />
+  </component>
+</project>
