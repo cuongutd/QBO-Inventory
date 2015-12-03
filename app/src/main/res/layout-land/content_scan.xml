@@ -1,24 +1,25 @@
 <LinearLayout
-    android:orientation="vertical"
+    android:orientation="horizontal"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginTop="?android:attr/actionBarSize"
-    android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     tools:context="com.tb2g.qboinventory.controller.ScanActivity"
     tools:showIn="@layout/activity_scan">
 
-
     <include layout="@layout/web_info"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"/>
+             android:layout_width="0dp"
+             android:layout_height="wrap_content"
+             android:layout_weight="1"/>
 
     <include layout="@layout/qbo_info"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"/>
+             android:layout_width="0dp"
+             android:layout_height="wrap_content"
+             android:layout_weight="1"/>
 
 </LinearLayout>
+
 

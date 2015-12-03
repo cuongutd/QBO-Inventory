@@ -1,0 +1,66 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <EditTextPreference
+        android:capitalize="words"
+        android:inputType="text"
+        android:key="SHARED_PREF_CONSUMMER_KEY"
+        android:maxLines="2"
+        android:selectAllOnFocus="true"
+        android:singleLine="false"
+        android:title="@string/pref_title_consumer_key"/>
+
+    <EditTextPreference
+        android:capitalize="words"
+        android:inputType="text"
+        android:key="SHARED_PREF_CONSUMMER_SECRET"
+        android:maxLines="2"
+        android:selectAllOnFocus="true"
+        android:singleLine="false"
+        android:title="@string/pref_title_consumer_secret"/>
+
+    <EditTextPreference
+        android:capitalize="words"
+        android:inputType="text"
+        android:key="SHARED_PREF_ACCESS_TOKEN"
+        android:maxLines="2"
+        android:selectAllOnFocus="true"
+        android:singleLine="false"
+        android:title="@string/pref_title_access_token"/>
+
+    <EditTextPreference
+        android:capitalize="words"
+        android:inputType="text"
+        android:key="SHARED_PREF_ACCESS_TOKEN_SECRET"
+        android:maxLines="2"
+        android:selectAllOnFocus="true"
+        android:singleLine="false"
+        android:title="@string/pref_title_access_token_secret"/>
+
+    <EditTextPreference
+        android:capitalize="words"
+        android:inputType="text"
+        android:key="SHARED_PREF_UPCDB_KEY"
+        android:maxLines="2"
+        android:selectAllOnFocus="true"
+        android:singleLine="false"
+        android:title="@string/pref_title_upc_db_key"/>
+
+    <EditTextPreference
+        android:capitalize="words"
+        android:inputType="text"
+        android:key="SHARED_PREF_QBO_COMPANY_ID"
+        android:maxLines="2"
+        android:selectAllOnFocus="true"
+        android:singleLine="false"
+        android:title="@string/pref_title_qbo_company_id"/>
+
+    <EditTextPreference
+        android:capitalize="words"
+        android:inputType="text"
+        android:key="SHARED_PREF_SAMPLE_ITEM_NAME"
+        android:maxLines="2"
+        android:selectAllOnFocus="true"
+        android:singleLine="false"
+        android:title="@string/pref_title_sample_itemname"/>
+
+</PreferenceScreen>

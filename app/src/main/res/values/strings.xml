@@ -13,10 +13,27 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
-    <string name="consumerKey">qyprdrXItMdZB4cIEZRwxCWx9aCZao</string>
-    <string name="consumerSecret">RJOJ3MTCL2A3Ao2xvkO9bBO9jEyKlbyRRuKb0Tuv</string>
-    <string name="companyId">1346739435</string>
     <string name="title_activity_scan">Inventory Re-Stock</string>
-    <string name="upcdbkey">8151b7ba6a0f5bdecabbb1c589848ce4</string>
     <string name="loading">Loading....</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="action_settings">Settings</string>
+
+
+
+    <!-- Strings related to Settings -->
+
+    <!-- Example General settings -->
+    <string name="pref_header_general">General</string>
+
+    <string name="pref_title_consumer_key">Consumer key</string>
+    <string name="pref_title_consumer_secret">Consumer Secret</string>
+    <string name="pref_title_access_token">Access Token</string>
+    <string name="pref_title_access_token_secret">Acces Token Secret</string>
+    <string name="pref_title_upc_db_key">UPC Database key</string>
+    <string name="pref_title_qbo_company_id">QBO company Id</string>
+    <string name="pref_title_sample_itemname">Sample item name</string>
+
+
+    <string name="pref_default_consumer_key">John Smith</string>
+
 </resources>

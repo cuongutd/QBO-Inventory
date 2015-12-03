@@ -1,11 +1,9 @@
 package com.tb2g.qboinventory.service;
 
-import com.tb2g.qboinventory.model.QueryItemResponse;
 import com.tb2g.qboinventory.model.UPCProduct;
 
 import retrofit.http.GET;
 import retrofit.http.Path;
-import retrofit.http.Query;
 
 /**
  * Created by Cuong on 12/1/2015.

@@ -1,5 +1,6 @@
 package com.tb2g.qboinventory.service;
 
+import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.squareup.okhttp.OkHttpClient;
@@ -19,12 +20,7 @@ public class RestClient {
     private static UPCDatabaseService upcService;
     private static Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").create();
 
-    private static String consumerKey = "qyprdrXItMdZB4cIEZRwxCWx9aCZao";
-    private static String consumerSecret = "RJOJ3MTCL2A3Ao2xvkO9bBO9jEyKlbyRRuKb0Tuv";
-    private static String accessToken = "qyprdUWHBsZk4Ehpa4b3yhOhNEoqJzZftItobLyltwvs8qCy";
-    private static String accessTokenSecret = "knxHcgqZmlVB3RCPpMqMECksBrK7YLtDM5XWl5in";
-
-    public static QBOService getQBOService() {
+    public static QBOService getQBOService(String consumerKey, String consumerSecret, String accessToken, String accessTokenSecret) {
         if (QBOService == null) {
 
             OkHttpOAuthConsumer oAuthConsumer = new OkHttpOAuthConsumer(consumerKey, consumerSecret);
@@ -35,10 +31,11 @@ public class RestClient {
 
             okHttpClient.interceptors().add(new SigningInterceptor(oAuthConsumer));
 
+            gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").create();
 
             RestAdapter.Builder builder = new RestAdapter.Builder()
                     .setEndpoint(QBOService.BASE_URL)
-                    .setLogLevel(RestAdapter.LogLevel.BASIC)
+                    .setLogLevel(RestAdapter.LogLevel.FULL)
                     .setClient(new OkClient(okHttpClient))
                     .setConverter(new GsonConverter(gson));
 
