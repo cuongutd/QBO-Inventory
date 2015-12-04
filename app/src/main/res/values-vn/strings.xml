@@ -1,0 +1,70 @@
+<resources>
+    <string name="app_name">QBO - Quản lý kho</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Mật khẩu</string>
+    <string name="action_sign_in">Đăng nhập hoặc đăng ký</string>
+    <string name="action_sign_in_short">Đăng nhập</string>
+    <string name="error_invalid_email">Email không hợp lệ</string>
+    <string name="error_invalid_password">Mật khẩu quá ngắn</string>
+    <string name="error_incorrect_password">Mật khẩu không đúng</string>
+    <string name="error_field_required">Trường bắt buộc nhập</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+    <string name="title_activity_scan">Nhập kho</string>
+    <string name="loading">Đang tải....</string>
+    <string name="title_activity_settings">Cài đặt thông số</string>
+    <string name="action_settings">Cài đặt</string>
+
+
+
+    <!-- Strings related to Settings -->
+
+    <!-- Example General settings -->
+    <string name="pref_header_general">Cài đặt chung</string>
+
+    <string name="pref_title_consumer_key">Consumer key</string>
+    <string name="pref_title_consumer_secret">Consumer Secret</string>
+    <string name="pref_title_access_token">Access Token</string>
+    <string name="pref_title_access_token_secret">Acces Token Secret</string>
+    <string name="pref_title_upc_db_key">UPC Database key</string>
+    <string name="pref_title_qbo_company_id">QBO company Id</string>
+    <string name="pref_title_sample_itemname">Sample item name</string>
+
+
+    <string name="scan_prompt_msg">Scan mã vạch</string>
+    <string name="sbar_looking_web">Tìm kiếm thông tin sản phẩm trên web....</string>
+    <string name="sbar_cannot_read">Không đọc được mã vạch!</string>
+    <string name="sbar_update_qty">Sản phẩm có trong kho. Tăng thêm số lượng?</string>
+    <string name="sbar_create_qbo">Sản phẩm không có trong kho. Nhập mới?</string>
+    <string name="sbar_sample_notfound">Sản phẩm mẫu không tìm thấy. Xin kiểm tra lại cài đặt.</string>
+    <string name="sbar_product_found_web">Sản phẩm tìm thấy trên web</string>
+    <string name="sbar_product_not_found">Sản phẩm không tìm thấy trên web!</string>
+    <string name="sbar_product_notfound_qbo">Sản phẩm không tìm thấy trên web lẫn QBO!</string>
+    <string name="sbar_item_saved">Sản phẩm đã được cập nhập vào QBO</string>
+    <string name="sbar_item_notsaved">Có lỗi cập nhật sản phẩm vào QBO!</string>
+    <string name="sbar_invalid_companyid">CompanyID không hợp lệ. Xin kiểm tra lại cài đặt!!!</string>
+    <string name="sbar_sku_dup_error">"Có nhiều hơn 1 sản phẩm với cùng mã vạch: "</string>
+    <string name="setting_load_completed_msg">Thông số cài đặt đẵ được cập nhật từ file!</string>
+    <string name="prompt_upc">Mã vạch</string>
+    <string name="promptwebname">Tên</string>
+    <string name="promptqbo">Trong QuickBooks:</string>
+    <string name="prompt_qbo_id">ID</string>
+    <string name="prompt_qbo_name">Tên</string>
+    <string name="prompt_qbo_desc">Mô tả</string>
+    <string name="prompt_qbo_qty">Số lượng</string>
+    <string name="prompt_qbo_price">Giá bán</string>
+    <string name="prompt_qbo_cost">Giá mua</string>
+    <string name="prompt_qbo_created">TG nhập</string>
+    <string name="prompt_qbo_updated">TG thay đổi</string>
+    <string name="setting_button_text">Đọc dữ liệu từ file</string>
+    <string name="sbar_generic_qbo_error">"Không tải được thông tin công ty. Chi tiết lỗi: "</string>
+    <string name="sbar_no_keys_setting">Cấu hình cần được cài đặt trước khi sử dụng!</string>
+    <string name="sbar_no_company">Không có thông tin công ty. Kiểm tra lại cài đặt!</string>
+    <string name="sbar_button_create">TẠO MỚI</string>
+    <string name="sbar_action_update">CẬP NHẬT</string>
+    <string name="qbo_base_url">https://quickbooks.api.intuit.com</string>
+    <string name="qbo_key_filename">qbo.txt</string>
+</resources>

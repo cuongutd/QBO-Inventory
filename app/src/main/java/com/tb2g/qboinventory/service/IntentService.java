@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.os.ResultReceiver;
 
+import com.tb2g.qboinventory.R;
 import com.tb2g.qboinventory.model.IntentServiceTask;
 import com.tb2g.qboinventory.model.QBOItem;
 import com.tb2g.qboinventory.model.QBOResponse;
@@ -14,6 +15,8 @@ import com.tb2g.qboinventory.model.UPCProduct;
 import com.tb2g.qboinventory.util.Constants;
 
 import java.math.BigDecimal;
+
+import retrofit.RetrofitError;
 
 public class IntentService extends android.app.IntentService {
     String consumerKey;
@@ -37,7 +40,6 @@ public class IntentService extends android.app.IntentService {
         mCompanyId = sharedPref.getString(Constants.SHARED_PREF_QBO_COMPANY_ID, "");
         mUPCDatabaseKey = sharedPref.getString(Constants.SHARED_PREF_UPCDB_KEY, "");
         mSampleItemName = sharedPref.getString(Constants.SHARED_PREF_SAMPLE_ITEM_NAME, "");
-
     }
 
 
@@ -65,15 +67,6 @@ public class IntentService extends android.app.IntentService {
                 .putExtra(Constants.EXTRA_UPC, upc)
                 .start();
     }
-
-    //called when first app started to get default income, asset, expense account for inventory item
-    public static void getSampleQBOItem(ResultReceiver receiver, Context context){
-        IntentServiceTask.with(context)
-                .setResultReceiver(receiver)
-                .goingToDo(Constants.ACTION_QBO_SAMPLE)
-                .start();
-    }
-
 
     public static void increaseQBOItemQuantity(ResultReceiver receiver, Context context, QBOItem qboItem){
 
@@ -131,8 +124,6 @@ public class IntentService extends android.app.IntentService {
 
                 QBOItem item = intent.getParcelableExtra(Constants.EXTRA_QBO_ITEM);
                 handleCreateQBOItem(receiver, item);
-            }else if (Constants.ACTION_QBO_SAMPLE.equals(action)) {
-                handleSampleQBOItem(receiver);
             }else if (Constants.ACTION_QBO_COMPANY.equals(action)) {
                 handleGetQBOCompanyInfo(receiver);
             }
@@ -151,27 +142,34 @@ public class IntentService extends android.app.IntentService {
         receiver.send(Constants.RESULT_CODE_WEB_PRODUCT, b);
     }
 
-    private void handleSampleQBOItem(ResultReceiver receiver){
-
-        String query = "Select * FROM Item WHERE name='" + mSampleItemName + "'";
-
-        QBOResponse response = getQBOService().findItemsBySKU(mCompanyId, query);
-
-        Bundle b = new Bundle();
-        b.putParcelable(Constants.EXTRA_QBO_QUERY, response);
-        receiver.send(Constants.RESULT_CODE_QBO_SAMPLE, b);
-
-    }
 
     private QBOService getQBOService(){
-        return RestClient.getQBOService(consumerKey, consumerSecret, accessToken, accessTokenSecret);
+
+        String baseURL = getString(R.string.qbo_base_url);
+        return RestClient.getQBOService(consumerKey, consumerSecret, accessToken, accessTokenSecret, baseURL);
 
     }
 
 
     private void handleGetQBOCompanyInfo(ResultReceiver receiver){
 
-        QBOResponse response = getQBOService().getCompanyInfo(mCompanyId);
+        QBOResponse response = new QBOResponse();
+        try {
+            response = getQBOService().getCompanyInfo(mCompanyId);
+
+            String query = "Select * FROM Item WHERE name='" + mSampleItemName + "'";
+            QBOResponse response2 = getQBOService().queryItem(mCompanyId, query);
+
+            response.setQueryResponse(response2.getQueryResponse());
+
+        }catch (RetrofitError e){
+
+            response.setErrorCode("" + e.getResponse().getStatus());
+            response.setErrorMsg(e.getResponse().getReason());
+
+        }catch (Exception e){
+            response.setErrorMsg(e.getMessage());
+        }
 
         Bundle b = new Bundle();
         b.putParcelable(Constants.EXTRA_QBO_COMPANY, response);
@@ -182,7 +180,7 @@ public class IntentService extends android.app.IntentService {
 
         String query = "Select * FROM Item WHERE sku='" + sku + "'";
 
-        QBOResponse response = getQBOService().findItemsBySKU(mCompanyId, query);
+        QBOResponse response = getQBOService().queryItem(mCompanyId, query);
 
         Bundle b = new Bundle();
         b.putParcelable(Constants.EXTRA_QBO_QUERY, response);

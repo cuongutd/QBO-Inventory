@@ -1,0 +1,4 @@
+<resources>
+    <string name="qbo_base_url">https://sandbox-quickbooks.api.intuit.com</string>
+    <string name="qbo_key_filename">qbo_debug.txt</string>
+</resources>

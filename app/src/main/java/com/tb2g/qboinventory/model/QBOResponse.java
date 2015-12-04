@@ -11,6 +11,24 @@ public class QBOResponse implements Parcelable {
     private QBOQueryItemResponse QueryResponse;
     private QBOItem Item;
     private String time;
+    private String errorCode;
+    private String errorMsg;
+
+    public String getErrorCode() {
+        return errorCode;
+    }
+
+    public void setErrorCode(String errorCode) {
+        this.errorCode = errorCode;
+    }
+
+    public String getErrorMsg() {
+        return errorMsg;
+    }
+
+    public void setErrorMsg(String errorMsg) {
+        this.errorMsg = errorMsg;
+    }
 
     public QBOCompanyInfo getCompanyInfo() {
         return CompanyInfo;
@@ -58,6 +76,8 @@ public class QBOResponse implements Parcelable {
         dest.writeParcelable(this.QueryResponse, 0);
         dest.writeParcelable(this.Item, 0);
         dest.writeString(this.time);
+        dest.writeString(this.errorCode);
+        dest.writeString(this.errorMsg);
     }
 
     protected QBOResponse(Parcel in) {
@@ -65,6 +85,8 @@ public class QBOResponse implements Parcelable {
         this.QueryResponse = in.readParcelable(QBOQueryItemResponse.class.getClassLoader());
         this.Item = in.readParcelable(QBOItem.class.getClassLoader());
         this.time = in.readString();
+        this.errorCode = in.readString();
+        this.errorMsg = in.readString();
     }
 
     public static final Creator<QBOResponse> CREATOR = new Creator<QBOResponse>() {

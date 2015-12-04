@@ -11,14 +11,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_columnSpan="2"
-        android:text="QuickBooks:"
+        android:text="@string/promptqbo"
         android:textAppearance="?android:attr/textAppearanceLarge"/>
 
     <TextView
         android:id="@+id/promptid"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="ID"
+        android:text="@string/prompt_qbo_id"
         />
 
     <TextView
@@ -31,7 +31,7 @@
         android:id="@+id/promptname2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Name"
+        android:text="@string/prompt_qbo_name"
         />
 
     <TextView
@@ -44,7 +44,7 @@
         android:id="@+id/promptdesc2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Desc"
+        android:text="@string/prompt_qbo_desc"
         />
 
     <TextView
@@ -57,7 +57,7 @@
         android:id="@+id/promptqty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Quantity"
+        android:text="@string/prompt_qbo_qty"
         />
 
     <TextView
@@ -70,7 +70,7 @@
         android:id="@+id/promptprice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Price"
+        android:text="@string/prompt_qbo_price"
         />
 
     <TextView
@@ -83,7 +83,7 @@
         android:id="@+id/promptcost"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Cost"
+        android:text="@string/prompt_qbo_cost"
         />
 
     <TextView
@@ -96,7 +96,7 @@
         android:id="@+id/promptcreated"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Created"
+        android:text="@string/prompt_qbo_created"
         />
 
     <TextView
@@ -109,7 +109,7 @@
         android:id="@+id/promptupdated"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Updated"
+        android:text="@string/prompt_qbo_updated"
         />
 
     <TextView

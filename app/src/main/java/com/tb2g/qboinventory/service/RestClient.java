@@ -20,7 +20,7 @@ public class RestClient {
     private static UPCDatabaseService upcService;
     private static Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").create();
 
-    public static QBOService getQBOService(String consumerKey, String consumerSecret, String accessToken, String accessTokenSecret) {
+    public static QBOService getQBOService(String consumerKey, String consumerSecret, String accessToken, String accessTokenSecret, String baseURL) {
         if (QBOService == null) {
 
             OkHttpOAuthConsumer oAuthConsumer = new OkHttpOAuthConsumer(consumerKey, consumerSecret);
@@ -34,8 +34,8 @@ public class RestClient {
             gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").create();
 
             RestAdapter.Builder builder = new RestAdapter.Builder()
-                    .setEndpoint(QBOService.BASE_URL)
-                    .setLogLevel(RestAdapter.LogLevel.FULL)
+                    .setEndpoint(baseURL)
+                    .setLogLevel(RestAdapter.LogLevel.BASIC)
                     .setClient(new OkClient(okHttpClient))
                     .setConverter(new GsonConverter(gson));
 

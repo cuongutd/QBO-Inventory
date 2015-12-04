@@ -11,17 +11,15 @@ import retrofit.http.Path;
 import retrofit.http.Query;
 
 /**
- * Created by Cuong on 12/1/2015.
+ * Created by Cuong on 12/4/2015.
  */
 public interface QBOService {
-
-    public static final String BASE_URL = "https://sandbox-quickbooks.api.intuit.com";
     @Headers({
             "Accept: application/json",
             "content-type: application/json"
     })
     @GET("/v3/company/{company}/query?minorversion=4")
-    public QBOResponse findItemsBySKU(@Path("company") String company, @Query("query") String query);
+    public QBOResponse queryItem(@Path("company") String company, @Query("query") String query);
 
     @Headers({
             "Accept: application/json",
@@ -43,5 +41,4 @@ public interface QBOService {
     })
     @GET("/v3/company/{company}/companyinfo/{company}?minorversion=4")
     public QBOResponse getCompanyInfo(@Path("company") String company);
-
 }

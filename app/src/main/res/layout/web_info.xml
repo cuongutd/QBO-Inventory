@@ -10,7 +10,7 @@
         android:id="@+id/promptupc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="UPC"
+        android:text="@string/prompt_upc"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textStyle="bold"/>
 
@@ -25,7 +25,7 @@
         android:id="@+id/promptname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Name"
+        android:text="@string/promptwebname"
         />
 
     <TextView

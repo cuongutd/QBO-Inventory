@@ -1,16 +1,20 @@
 package com.tb2g.qboinventory.controller;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -77,25 +81,77 @@ public class ScanActivity extends BaseAppCompatActivity {
 
         configFabButton();
 
-        if (mSampleQBOItem == null)
-            //load a sample item for used when creating new items
-            IntentService.getSampleQBOItem(mReceiver, this);
-
-        if (mCompanyInfo == null)
-            IntentService.getCompanyInfo(mReceiver, this);
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        loadQBOCompanyInfo();//try to load it if needed
+    }
+
+
+    private void loadQBOCompanyInfo(){
+
+        if (!isKeysSetup()){
+            startActivity(new Intent(this, SettingsActivity.class));
+        }else if (mSampleQBOItem == null || mCompanyInfo == null)
+            IntentService.getCompanyInfo(mReceiver, this);
+
+    }
+
+
+    private boolean isKeysSetup(){
+
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        String consumerKey = sharedPref.getString(Constants.SHARED_PREF_CONSUMMER_KEY, "");
+        String consumerSecret = sharedPref.getString(Constants.SHARED_PREF_CONSUMMER_SECRET, "");
+        String accessToken = sharedPref.getString(Constants.SHARED_PREF_ACCESS_TOKEN, "");
+        String accessTokenSecret = sharedPref.getString(Constants.SHARED_PREF_ACCESS_TOKEN_SECRET, "");
+        String mCompanyId = sharedPref.getString(Constants.SHARED_PREF_QBO_COMPANY_ID, "");
+        String mUPCDatabaseKey = sharedPref.getString(Constants.SHARED_PREF_UPCDB_KEY, "");
+        String mSampleItemName = sharedPref.getString(Constants.SHARED_PREF_SAMPLE_ITEM_NAME, "");
+
+        if (TextUtils.isEmpty(consumerKey)||
+                TextUtils.isEmpty(consumerSecret)||
+                TextUtils.isEmpty(accessToken)||
+                TextUtils.isEmpty(accessTokenSecret)||
+                TextUtils.isEmpty(mCompanyId)||
+                TextUtils.isEmpty(mUPCDatabaseKey)||
+                TextUtils.isEmpty(mSampleItemName))
+            return false;
+        else
+            return true;
+
+    }
+
+    private boolean companyNotLoaded(){
+        return (mCompanyInfo == null || mSampleQBOItem == null);
+    }
+
 
     private void configFabButton(){
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
+                if (!isKeysSetup()){
+                    showSnackbarNoAction(getString(R.string.sbar_no_keys_setting),true);
+                    return;
+                }
+
+                if (companyNotLoaded()){
+                    showSnackbarNoAction(getString(R.string.sbar_no_company),true);
+                    return;
+                }
+
+
+
                 resetViews();
                 IntentIntegrator integrator = new IntentIntegrator(ScanActivity.this);
                 integrator.addExtra("SCAN_WIDTH", 800);
-                integrator.addExtra("SCAN_HEIGHT", 200);
+                integrator.addExtra("SCAN_HEIGHT", 400);
                 integrator.addExtra("RESULT_DISPLAY_DURATION_MS", 3000L);
-                integrator.addExtra("PROMPT_MESSAGE", "Scan a barcode");
+                integrator.addExtra("PROMPT_MESSAGE", getString(R.string.scan_prompt_msg));
                 integrator.initiateScan(IntentIntegrator.PRODUCT_CODE_TYPES);//scan product code type
             }
         });
@@ -152,11 +208,11 @@ public class ScanActivity extends BaseAppCompatActivity {
                 mReceiver = new BaseResultReceiver(new Handler());
                 mReceiver.setReceiver(this);
             }
-            showSnackbarNoAction("Looking for product information on the web....", false);
+            showSnackbarNoAction(getString(R.string.sbar_looking_web), false);
             IntentService.getWebProductInfo(mReceiver, this, paddedUPC);
 
         } else {
-            showSnackbarNoAction("Cannot read barcode!", true);
+            showSnackbarNoAction(getString(R.string.sbar_cannot_read), true);
         }
 
     }
@@ -205,8 +261,8 @@ public class ScanActivity extends BaseAppCompatActivity {
 
     private void showSnackbarUpdate() {
         snackbarStatus = 2;
-        mSnackbar = Snackbar.make(fab, "Item found in QBO. Update quantity?", Snackbar.LENGTH_INDEFINITE)
-                .setAction("UPDATE", new View.OnClickListener() {
+        mSnackbar = Snackbar.make(fab, R.string.sbar_update_qty, Snackbar.LENGTH_INDEFINITE)
+                .setAction(R.string.sbar_action_update, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         IntentService.increaseQBOItemQuantity(mReceiver, ScanActivity.this, mQBOItem);
@@ -225,12 +281,12 @@ public class ScanActivity extends BaseAppCompatActivity {
 
     private void showSnackbarCreate() {
         snackbarStatus = 3;
-        mSnackbar = Snackbar.make(fab, "Item not found in QBO. Create new?", Snackbar.LENGTH_INDEFINITE)
-                .setAction("CREATE", new View.OnClickListener() {
+        mSnackbar = Snackbar.make(fab, R.string.sbar_create_qbo, Snackbar.LENGTH_INDEFINITE)
+                .setAction(R.string.sbar_button_create, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         if (mSampleQBOItem == null){
-                            showSnackbarNoAction("Item sample not found. Please check sample name setting.", true);
+                            showSnackbarNoAction(getString(R.string.sbar_sample_notfound), true);
                             return;
                         }
                         QBOItem item = QBOItem.fromUPCProduct(mProduct);
@@ -275,10 +331,10 @@ public class ScanActivity extends BaseAppCompatActivity {
                 mProduct = resultData.getParcelable(Constants.EXTRA_UPC_PRODUCT);
 
                 if (mProduct.isValid()) {
-                    showSnackbarNoAction("Product found on the internet", false);
+                    showSnackbarNoAction(getString(R.string.sbar_product_found_web), false);
                     populateViews();
                 } else {
-                    showSnackbarNoAction("Product not found in the web database!", false);
+                    showSnackbarNoAction(getString(R.string.sbar_product_not_found), false);
                 }
                 //lookup in QBO for item info
                 IntentService.getQBOItemInfo(mReceiver, this, upc.getText().toString());
@@ -292,23 +348,22 @@ public class ScanActivity extends BaseAppCompatActivity {
 
                 //if not found then create new
                 if (count == 0) {
-                    if (mProduct != null && mProduct.isValid()) {
+                    if (mProduct != null && mProduct.isValid())
                         showSnackbarCreate();
-                    } else {
-
-                        showSnackbarNoAction("Unknown product and it's not found in QBO!", true);
-
-                    }
-
+                    else
+                        showSnackbarNoAction(getString(R.string.sbar_product_notfound_qbo), true);
                 } else if (count == 1) {//if found and count = 1 then increase quantity
                     mQBOItem = result.getQueryResponse().getItem().get(0);
                     populateViews();
 
                     showSnackbarUpdate();
 
-                } else//if found and count > 1 then raise error
-                    showSnackbarNoAction("Not good! " + count + " items having the same SKU " + upc.getText().toString() + " in QuickBooks Online!!!", true);
-
+                } else {//if found and count > 1 then raise error
+                    String msg = "";
+                    for (QBOItem item : result.getQueryResponse().getItem())
+                        msg += item.getName() + ",\n";
+                    showSnackbarNoAction(getString(R.string.sbar_sku_dup_error) + msg, true);
+                }
                 break;
             case Constants.RESULT_CODE_QBO_ITEM: //returned when you add/update qbo item
 
@@ -317,34 +372,32 @@ public class ScanActivity extends BaseAppCompatActivity {
                 if (result.getItem() != null && result.getItem().getId() != null) {
                     mQBOItem = result.getItem();
                     populateViews();
-                    showSnackbarNoAction("Item saved to QBO!", false);
+                    showSnackbarNoAction(getString(R.string.sbar_item_saved), false);
                 } else {
-                    showSnackbarNoAction("Failed to update QBO!!!", false);
+                    showSnackbarNoAction(getString(R.string.sbar_item_notsaved), false);
                 }
-                break;
-            case Constants.RESULT_CODE_QBO_SAMPLE:
-
-                result = resultData.getParcelable(Constants.EXTRA_QBO_QUERY);
-
-                if (result.getQueryResponse() != null && result.getQueryResponse().getItem() != null)
-                    count = result.getQueryResponse().getItem().size();
-
-                //if not found then create new
-                if (count == 0) {
-                    showSnackbarNoAction("Item sample not found! Please check sample name setting", true);
-                } else//if found and count = 1 then increase quantity
-                    mSampleQBOItem = result.getQueryResponse().getItem().get(0);
                 break;
             case Constants.RESULT_CODE_QBO_COMPANY:
 
                 result = resultData.getParcelable(Constants.EXTRA_QBO_COMPANY);
 
-                if (result.getCompanyInfo() != null) {
+                if (!TextUtils.isEmpty(result.getErrorCode()) ||!TextUtils.isEmpty(result.getErrorMsg())) //something wrong
+
+                    showSnackbarNoAction(getString(R.string.sbar_generic_qbo_error) +
+                            result.getErrorCode() +
+                            "-" +
+                            result.getErrorMsg(), true);
+
+                else if (result.getCompanyInfo() != null
+                        && result.getQueryResponse() != null
+                        && result.getQueryResponse().getItem() != null
+                        && result.getQueryResponse().getItem().size() == 1) {
+                    mSampleQBOItem = result.getQueryResponse().getItem().get(0);
                     mCompanyInfo = result.getCompanyInfo();
                     getSupportActionBar().setSubtitle(mCompanyInfo.getCompanyName());
                 }
                 else
-                    showSnackbarNoAction("Invalid Company ID. Please check in setting!!!", true);
+                    showSnackbarNoAction(getString(R.string.sbar_invalid_companyid), true);
                 break;
         }
     }
