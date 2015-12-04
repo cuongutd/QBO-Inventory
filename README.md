@@ -9,7 +9,7 @@ You need to have set of intuit consumer key/secret and access token/secret
 You need to have signed up and a key from upcdatabase.org
 You then create a config file with name qbo.txt in this format:
 
-consumerKey:<value>
+consumerKey:<value>\n
 consumerSecret:<value>
 accessToken:<value>
 accessTokenSecret:<value>
