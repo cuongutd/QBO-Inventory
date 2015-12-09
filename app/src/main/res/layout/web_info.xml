@@ -1,44 +1,61 @@
-<GridLayout
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                                    android:id="@+id/card_view"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+    >
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:columnCount="2"
-    android:orientation="horizontal"
-    android:useDefaultMargins="true">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="4dp">
 
-    <TextView
-        android:id="@+id/promptupc"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/prompt_upc"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textStyle="bold"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/upc"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textStyle="bold"/>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_weight="1">
 
-    <TextView
-        android:id="@+id/promptname"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/promptwebname"
-        />
+            <TextView
+                android:id="@+id/upc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="SKU"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textAlignment="viewEnd"
+                android:textStyle="bold"/>
 
-    <TextView
-        android:id="@+id/productname"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textStyle="bold"/>
+            <TextView
+                android:id="@+id/productname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Name"
+                android:textStyle="bold"
+                android:textAlignment="viewEnd"/>
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/productimg"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:src="@drawable/barcode"
+            android:scaleType="fitCenter"/>
+    </LinearLayout>
 
     <TextView
         android:id="@+id/description"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:layout_columnSpan="2"/>
-
-</GridLayout>
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_columnSpan="2"
+        android:layout_weight="1"
+        android:text="description"
+        />
+</LinearLayout>
+</android.support.v7.widget.CardView>

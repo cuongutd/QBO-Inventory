@@ -12,9 +12,11 @@ import com.tb2g.qboinventory.model.IntentServiceTask;
 import com.tb2g.qboinventory.model.QBOItem;
 import com.tb2g.qboinventory.model.QBOResponse;
 import com.tb2g.qboinventory.model.UPCProduct;
+import com.tb2g.qboinventory.model.UPCSearchProduct;
 import com.tb2g.qboinventory.util.Constants;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 
 import retrofit.RetrofitError;
 
@@ -136,7 +138,10 @@ public class IntentService extends android.app.IntentService {
 
     private void handleUPCLookup(ResultReceiver receiver, String upc){
 
-        UPCProduct product = RestClient.getUPCService().lookupProduct(mUPCDatabaseKey, upc);
+        //UPCProduct product = RestClient.getUPCService().lookupProduct(mUPCDatabaseKey, upc);
+        HashMap<Integer, UPCSearchProduct> products = RestClient.getUPCSearchService().lookupProduct("73C8EA26-5AFE-44AC-B193-ED15B574B377", upc);
+        UPCSearchProduct product = products.get(new Integer(0));
+        product.setUpc(upc);
         Bundle b = new Bundle();
         b.putParcelable(Constants.EXTRA_UPC_PRODUCT, product);
         receiver.send(Constants.RESULT_CODE_WEB_PRODUCT, b);

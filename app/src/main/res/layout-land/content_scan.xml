@@ -5,19 +5,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginTop="?android:attr/actionBarSize"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingLeft="@dimen/base_padding"
+    android:paddingRight="@dimen/base_padding"
+    android:paddingTop="@dimen/base_padding"
+    android:paddingBottom="@dimen/base_padding"
     tools:context="com.tb2g.qboinventory.controller.ScanActivity"
     tools:showIn="@layout/activity_scan">
 
     <include layout="@layout/web_info"
              android:layout_width="0dp"
-             android:layout_height="wrap_content"
+             android:layout_height="match_parent"
              android:layout_weight="1"/>
-
+    <android.support.v4.widget.Space
+        android:layout_width="6dp"
+        android:layout_height="match_parent"/>
     <include layout="@layout/qbo_info"
              android:layout_width="0dp"
-             android:layout_height="wrap_content"
+             android:layout_height="match_parent"
              android:layout_weight="1"/>
 
 </LinearLayout>

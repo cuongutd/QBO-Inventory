@@ -13,9 +13,11 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.tb2g.qboinventory.R;
@@ -23,9 +25,11 @@ import com.tb2g.qboinventory.model.QBOCompanyInfo;
 import com.tb2g.qboinventory.model.QBOItem;
 import com.tb2g.qboinventory.model.QBOResponse;
 import com.tb2g.qboinventory.model.UPCProduct;
+import com.tb2g.qboinventory.model.UPCSearchProduct;
 import com.tb2g.qboinventory.service.BaseResultReceiver;
 import com.tb2g.qboinventory.service.IntentService;
 import com.tb2g.qboinventory.util.Constants;
+import com.tb2g.qboinventory.util.DateUtil;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -58,8 +62,11 @@ public class ScanActivity extends BaseAppCompatActivity {
     TextView qboCreatedDate;
     @Bind(R.id.qboupdated)
     TextView qboUpdatedDate;
+    @Bind(R.id.productimg)
+    ImageView productImg;
 
-    private UPCProduct mProduct;
+    //private UPCProduct mProduct;
+    private UPCSearchProduct mProduct;
     private QBOItem mQBOItem;
     private QBOItem mSampleQBOItem;
     private QBOCompanyInfo mCompanyInfo;
@@ -149,7 +156,7 @@ public class ScanActivity extends BaseAppCompatActivity {
                 resetViews();
                 IntentIntegrator integrator = new IntentIntegrator(ScanActivity.this);
                 integrator.addExtra("SCAN_WIDTH", 800);
-                integrator.addExtra("SCAN_HEIGHT", 400);
+                integrator.addExtra("SCAN_HEIGHT", 300);
                 integrator.addExtra("RESULT_DISPLAY_DURATION_MS", 3000L);
                 integrator.addExtra("PROMPT_MESSAGE", getString(R.string.scan_prompt_msg));
                 integrator.initiateScan(IntentIntegrator.PRODUCT_CODE_TYPES);//scan product code type
@@ -209,7 +216,7 @@ public class ScanActivity extends BaseAppCompatActivity {
                 mReceiver.setReceiver(this);
             }
             showSnackbarNoAction(getString(R.string.sbar_looking_web), false);
-            IntentService.getWebProductInfo(mReceiver, this, paddedUPC);
+            IntentService.getWebProductInfo(mReceiver, this, unpaddedUPC);
 
         } else {
             showSnackbarNoAction(getString(R.string.sbar_cannot_read), true);
@@ -218,10 +225,12 @@ public class ScanActivity extends BaseAppCompatActivity {
     }
 
     private void populateViews() {
-        if (mProduct != null && mProduct.isValid()) {
-            productName.setText(mProduct.getItemname());
-            productDesc.setText(mProduct.getDescription());
-            upc.setText(mProduct.getNumber());
+        if (mProduct != null && !TextUtils.isEmpty(mProduct.getProductname())) {
+            productName.setText(mProduct.getProductname());
+            productDesc.setText(mProduct.getProducturl());
+            upc.setText(mProduct.getUpc());
+            Glide.with(this).load(mProduct.getImageurl()).into(productImg);
+
         }
 
         if (mQBOItem != null) {
@@ -230,12 +239,16 @@ public class ScanActivity extends BaseAppCompatActivity {
             qboDesc.setText(mQBOItem.getDescription());
             if (mQBOItem.getQtyOnHand() != null)
                 qboQuantity.setText(mQBOItem.getQtyOnHand().toString());
+            else
+                qboQuantity.setText("0");
             if (mQBOItem.getUnitPrice() != null)
                 qboPrice.setText(mQBOItem.getUnitPrice().toString());
+
             if (mQBOItem.getPurchaseCost() != null)
                 qboCost.setText(mQBOItem.getPurchaseCost().toString());
-            qboCreatedDate.setText(mQBOItem.getMetaData().getCreateTime());
-            qboUpdatedDate.setText(mQBOItem.getMetaData().getLastUpdatedTime());
+
+            qboCreatedDate.setText(DateUtil.getReadableDate(DateUtil.formatStringToTimestamp(mQBOItem.getMetaData().getCreateTime())));
+            qboUpdatedDate.setText(DateUtil.getReadableDate(DateUtil.formatStringToTimestamp(mQBOItem.getMetaData().getLastUpdatedTime())));
         }
     }
 
@@ -330,7 +343,7 @@ public class ScanActivity extends BaseAppCompatActivity {
 
                 mProduct = resultData.getParcelable(Constants.EXTRA_UPC_PRODUCT);
 
-                if (mProduct.isValid()) {
+                if (!TextUtils.isEmpty(mProduct.getProductname())) {
                     showSnackbarNoAction(getString(R.string.sbar_product_found_web), false);
                     populateViews();
                 } else {
@@ -348,7 +361,7 @@ public class ScanActivity extends BaseAppCompatActivity {
 
                 //if not found then create new
                 if (count == 0) {
-                    if (mProduct != null && mProduct.isValid())
+                    if (mProduct != null && !TextUtils.isEmpty(mProduct.getProductname()))
                         showSnackbarCreate();
                     else
                         showSnackbarNoAction(getString(R.string.sbar_product_notfound_qbo), true);

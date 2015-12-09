@@ -51,14 +51,14 @@
     <string name="prompt_upc">UPC</string>
     <string name="promptwebname">Name</string>
     <string name="promptqbo">QuickBooks:</string>
-    <string name="prompt_qbo_id">ID</string>
+    <string name="prompt_qbo_id">QBO-ID</string>
     <string name="prompt_qbo_name">Name</string>
     <string name="prompt_qbo_desc">Desc</string>
     <string name="prompt_qbo_qty">Quantity</string>
     <string name="prompt_qbo_price">Price</string>
     <string name="prompt_qbo_cost">Cost</string>
-    <string name="prompt_qbo_created">Created</string>
-    <string name="prompt_qbo_updated">Updated</string>
+    <string name="prompt_qbo_created">First imported at</string>
+    <string name="prompt_qbo_updated">Last updated at</string>
     <string name="setting_button_text">Load setting from file</string>
     <string name="sbar_generic_qbo_error">"Unable to load QBO company info. Details: "</string>
     <string name="sbar_no_keys_setting">Please go to setting and setup keys!</string>

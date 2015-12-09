@@ -211,12 +211,26 @@ public class QBOItem implements Parcelable {
         if (TextUtils.isEmpty(item.getName()))
             item.setName(product.getDescription());
 
-        //TODO set asset, income and expense account
-
         return item;
 
     }
 
+    public static QBOItem fromUPCProduct(UPCSearchProduct product){
+
+        QBOItem item = new QBOItem();
+
+        item.setName(product.getProductname());
+        item.setDescription(product.getProducturl());
+        item.setTrackQtyOnHand(true);
+        item.setType(QBOItemTypeEnum.INVENTORY.value());
+        item.setActive(true);
+        item.setSku(product.getUpc());
+        item.setInvStartDate(DateUtil.formatDateToString(new Date()));
+        item.setQtyOnHand(new BigDecimal(1));
+
+        return item;
+
+    }
 
     public QBOItem() {
     }

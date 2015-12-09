@@ -18,6 +18,7 @@ public class RestClient {
 
     private static QBOService QBOService;
     private static UPCDatabaseService upcService;
+    private static UPCSearchService searchService;
     private static Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").create();
 
     public static QBOService getQBOService(String consumerKey, String consumerSecret, String accessToken, String accessTokenSecret, String baseURL) {
@@ -62,6 +63,23 @@ public class RestClient {
         }
 
         return upcService;
+    }
+
+    public static UPCSearchService getUPCSearchService(){
+
+        if (upcService == null) {
+
+            RestAdapter.Builder builder = new RestAdapter.Builder()
+                    .setEndpoint(searchService.BASE_URL)
+                    .setLogLevel(RestAdapter.LogLevel.BASIC)
+                    .setConverter(new GsonConverter(gson));
+
+            RestAdapter restAdapter = builder.build();
+
+            searchService = restAdapter.create(UPCSearchService.class);
+        }
+
+        return searchService;
     }
 
 }
