@@ -3,6 +3,7 @@ package com.tb2g.qboinventory.controller;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -13,9 +14,12 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.TextSwitcher;
 import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.ViewSwitcher;
 
 import com.bumptech.glide.Glide;
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -24,7 +28,6 @@ import com.tb2g.qboinventory.R;
 import com.tb2g.qboinventory.model.QBOCompanyInfo;
 import com.tb2g.qboinventory.model.QBOItem;
 import com.tb2g.qboinventory.model.QBOResponse;
-import com.tb2g.qboinventory.model.UPCProduct;
 import com.tb2g.qboinventory.model.UPCSearchProduct;
 import com.tb2g.qboinventory.service.BaseResultReceiver;
 import com.tb2g.qboinventory.service.IntentService;
@@ -52,8 +55,10 @@ public class ScanActivity extends BaseAppCompatActivity {
     TextView qboName;
     @Bind(R.id.qbodesc)
     TextView qboDesc;
+    //@Bind(R.id.qboqty)
+    //TextView qboQuantity;
     @Bind(R.id.qboqty)
-    TextView qboQuantity;
+    TextSwitcher mQtySwitcher;
     @Bind(R.id.qboprice)
     TextView qboPrice;
     @Bind(R.id.qbocost)
@@ -61,7 +66,8 @@ public class ScanActivity extends BaseAppCompatActivity {
     @Bind(R.id.qbocreated)
     TextView qboCreatedDate;
     @Bind(R.id.qboupdated)
-    TextView qboUpdatedDate;
+    TextSwitcher mUpdateSwitcher;
+    //TextView qboUpdatedDate;
     @Bind(R.id.productimg)
     ImageView productImg;
 
@@ -82,6 +88,11 @@ public class ScanActivity extends BaseAppCompatActivity {
 
         ButterKnife.bind(this);
 
+        //mQtySwitcher = (TextSwitcher) findViewById(R.id.qboqty);
+        //mUpdateSwitcher = (TextSwitcher) findViewById(R.id.qboupdated);
+        initQtySwitcher();
+        initUpdateSwitcher();
+
         setSupportActionBar(toolbar);
 
         handleSavedInstance(savedInstanceState);
@@ -94,6 +105,48 @@ public class ScanActivity extends BaseAppCompatActivity {
     protected void onStart() {
         super.onStart();
         loadQBOCompanyInfo();//try to load it if needed
+    }
+
+    private void initQtySwitcher(){
+
+        mQtySwitcher.setFactory(new ViewSwitcher.ViewFactory() {
+
+            public View makeView() {
+                TextView myText = new TextView(ScanActivity.this);
+                myText.setTypeface(null, Typeface.BOLD);
+                return myText;
+            }
+        });
+
+        // Declare the in and out animations and initialize them
+        Animation in = AnimationUtils.loadAnimation(this, android.R.anim.slide_in_left);
+        Animation out = AnimationUtils.loadAnimation(this,android.R.anim.slide_out_right);
+
+        // set the animation type of textSwitcher
+        mQtySwitcher.setInAnimation(in);
+        mQtySwitcher.setOutAnimation(out);
+
+    }
+
+    private void initUpdateSwitcher(){
+
+        mUpdateSwitcher.setFactory(new ViewSwitcher.ViewFactory() {
+
+            public View makeView() {
+                TextView myText = new TextView(ScanActivity.this);
+                myText.setTypeface(null, Typeface.BOLD);
+                return myText;
+            }
+        });
+
+        // Declare the in and out animations and initialize them
+        Animation in = AnimationUtils.loadAnimation(this, android.R.anim.fade_in);
+        Animation out = AnimationUtils.loadAnimation(this,android.R.anim.fade_out);
+
+        // set the animation type of textSwitcher
+        mUpdateSwitcher.setInAnimation(in);
+        mUpdateSwitcher.setOutAnimation(out);
+
     }
 
 
@@ -238,9 +291,9 @@ public class ScanActivity extends BaseAppCompatActivity {
             qboName.setText(mQBOItem.getName());
             qboDesc.setText(mQBOItem.getDescription());
             if (mQBOItem.getQtyOnHand() != null)
-                qboQuantity.setText(mQBOItem.getQtyOnHand().toString());
+                mQtySwitcher.setText(mQBOItem.getQtyOnHand().toString());
             else
-                qboQuantity.setText("0");
+                mQtySwitcher.setText("0");
             if (mQBOItem.getUnitPrice() != null)
                 qboPrice.setText(mQBOItem.getUnitPrice().toString());
 
@@ -248,7 +301,7 @@ public class ScanActivity extends BaseAppCompatActivity {
                 qboCost.setText(mQBOItem.getPurchaseCost().toString());
 
             qboCreatedDate.setText(DateUtil.getReadableDate(DateUtil.formatStringToTimestamp(mQBOItem.getMetaData().getCreateTime())));
-            qboUpdatedDate.setText(DateUtil.getReadableDate(DateUtil.formatStringToTimestamp(mQBOItem.getMetaData().getLastUpdatedTime())));
+            mUpdateSwitcher.setText(DateUtil.getReadableDate(DateUtil.formatStringToTimestamp(mQBOItem.getMetaData().getLastUpdatedTime())));
         }
     }
 
@@ -261,11 +314,11 @@ public class ScanActivity extends BaseAppCompatActivity {
         qboId.setText("");
         qboName.setText("");
         qboDesc.setText("");
-        qboQuantity.setText("");
+        mQtySwitcher.setText("");
         qboPrice.setText("");
         qboCost.setText("");
         qboCreatedDate.setText("");
-        qboUpdatedDate.setText("");
+        mUpdateSwitcher.setText("");
 
 
         //qboMessage.setText("");
