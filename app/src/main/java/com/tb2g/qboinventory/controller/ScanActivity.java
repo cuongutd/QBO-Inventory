@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -34,6 +35,8 @@ import com.tb2g.qboinventory.service.IntentService;
 import com.tb2g.qboinventory.util.Constants;
 import com.tb2g.qboinventory.util.DateUtil;
 
+import org.w3c.dom.Text;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -41,8 +44,8 @@ public class ScanActivity extends BaseAppCompatActivity {
 
     @Bind(R.id.productname)
     TextView productName;
-    @Bind(R.id.description)
-    TextView productDesc;
+//    @Bind(R.id.description)
+//    TextView productDesc;
     @Bind(R.id.upc)
     TextView upc;
     @Bind(R.id.fab)
@@ -113,7 +116,7 @@ public class ScanActivity extends BaseAppCompatActivity {
 
             public View makeView() {
                 TextView myText = new TextView(ScanActivity.this);
-                myText.setTypeface(null, Typeface.BOLD);
+                myText.setTextColor(getResources().getColor(R.color.colorPrimaryText));
                 return myText;
             }
         });
@@ -134,7 +137,7 @@ public class ScanActivity extends BaseAppCompatActivity {
 
             public View makeView() {
                 TextView myText = new TextView(ScanActivity.this);
-                myText.setTypeface(null, Typeface.BOLD);
+                myText.setTextColor(getResources().getColor(R.color.colorPrimaryText));
                 return myText;
             }
         });
@@ -189,32 +192,34 @@ public class ScanActivity extends BaseAppCompatActivity {
     }
 
 
-    private void configFabButton(){
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+    private View.OnClickListener openScannerListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
 
-                if (!isKeysSetup()){
-                    showSnackbarNoAction(getString(R.string.sbar_no_keys_setting),true);
-                    return;
-                }
-
-                if (companyNotLoaded()){
-                    showSnackbarNoAction(getString(R.string.sbar_no_company),true);
-                    return;
-                }
-
-
-
-                resetViews();
-                IntentIntegrator integrator = new IntentIntegrator(ScanActivity.this);
-                integrator.addExtra("SCAN_WIDTH", 800);
-                integrator.addExtra("SCAN_HEIGHT", 300);
-                integrator.addExtra("RESULT_DISPLAY_DURATION_MS", 3000L);
-                integrator.addExtra("PROMPT_MESSAGE", getString(R.string.scan_prompt_msg));
-                integrator.initiateScan(IntentIntegrator.PRODUCT_CODE_TYPES);//scan product code type
+            if (!isKeysSetup()){
+                showSnackbarNoAction(getString(R.string.sbar_no_keys_setting),true);
+                return;
             }
-        });
+
+            if (companyNotLoaded()){
+                showSnackbarNoAction(getString(R.string.sbar_no_company),true);
+                return;
+            }
+
+
+
+            resetViews();
+            IntentIntegrator integrator = new IntentIntegrator(ScanActivity.this);
+            integrator.addExtra("SCAN_WIDTH", 800);
+            integrator.addExtra("SCAN_HEIGHT", 300);
+            integrator.addExtra("RESULT_DISPLAY_DURATION_MS", 3000L);
+            integrator.addExtra("PROMPT_MESSAGE", getString(R.string.scan_prompt_msg));
+            integrator.initiateScan(IntentIntegrator.PRODUCT_CODE_TYPES);//scan product code type
+        }
+    };
+
+    private void configFabButton(){
+        fab.setOnClickListener(openScannerListener);
     }
 
 
@@ -280,9 +285,29 @@ public class ScanActivity extends BaseAppCompatActivity {
     private void populateViews() {
         if (mProduct != null && !TextUtils.isEmpty(mProduct.getProductname())) {
             productName.setText(mProduct.getProductname());
-            productDesc.setText(mProduct.getProducturl());
+            //productDesc.setText(mProduct.getProducturl());
             upc.setText(mProduct.getUpc());
             Glide.with(this).load(mProduct.getImageurl()).into(productImg);
+
+            productImg.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    String url = mProduct.getProducturl();
+                    if (TextUtils.isEmpty(mProduct.getProducturl()))
+                        url = "https://www.google.com/search?q=" + mProduct.getProductname();
+
+                    Intent intent = new Intent();
+                    intent.setAction(Intent.ACTION_VIEW);
+                    intent.addCategory(Intent.CATEGORY_BROWSABLE);
+                    intent.setData(Uri.parse(url));
+                    startActivity(intent);
+                }
+            });
+
+        }else{
+            productImg.setOnClickListener(openScannerListener);
+
 
         }
 
@@ -308,8 +333,9 @@ public class ScanActivity extends BaseAppCompatActivity {
 
     private void resetViews() {
         productName.setText("");
-        productDesc.setText("");
+        //productDesc.setText("");
         upc.setText("");
+        productImg.setOnClickListener(openScannerListener);
 
         qboId.setText("");
         qboName.setText("");
@@ -514,7 +540,13 @@ public class ScanActivity extends BaseAppCompatActivity {
             startActivity(settingIntent);
 
             return true;
-        }
+        }else if (id == R.id.action_sheet) {
+
+                Intent intent = new Intent(this, SpreadSheetActivity.class);
+                startActivity(intent);
+
+                return true;
+            }
         return super.onOptionsItemSelected(item);
     }
 

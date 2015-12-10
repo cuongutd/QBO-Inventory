@@ -1,7 +1,7 @@
 package com.tb2g.qboinventory.service;
 
-import android.content.Intent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -11,7 +11,6 @@ import com.tb2g.qboinventory.R;
 import com.tb2g.qboinventory.model.IntentServiceTask;
 import com.tb2g.qboinventory.model.QBOItem;
 import com.tb2g.qboinventory.model.QBOResponse;
-import com.tb2g.qboinventory.model.UPCProduct;
 import com.tb2g.qboinventory.model.UPCSearchProduct;
 import com.tb2g.qboinventory.util.Constants;
 
@@ -27,6 +26,7 @@ public class IntentService extends android.app.IntentService {
     String accessTokenSecret;
     String mCompanyId;
     String mUPCDatabaseKey;
+    String mUPCSearchAccessToken;
     String mSampleItemName;
 
     public IntentService() {
@@ -40,7 +40,8 @@ public class IntentService extends android.app.IntentService {
         accessToken = sharedPref.getString(Constants.SHARED_PREF_ACCESS_TOKEN, "");
         accessTokenSecret = sharedPref.getString(Constants.SHARED_PREF_ACCESS_TOKEN_SECRET, "");
         mCompanyId = sharedPref.getString(Constants.SHARED_PREF_QBO_COMPANY_ID, "");
-        mUPCDatabaseKey = sharedPref.getString(Constants.SHARED_PREF_UPCDB_KEY, "");
+        mUPCDatabaseKey = sharedPref.getString(Constants.SHARED_PREF_UPCDB_KEY, ""); //no longer used
+        mUPCSearchAccessToken = sharedPref.getString(Constants.SHARED_PREF_UPCDB_KEY, "");
         mSampleItemName = sharedPref.getString(Constants.SHARED_PREF_SAMPLE_ITEM_NAME, "");
     }
 
@@ -100,7 +101,6 @@ public class IntentService extends android.app.IntentService {
     }
 
 
-
     @Override
     protected void onHandleIntent(Intent intent) {
 
@@ -139,7 +139,7 @@ public class IntentService extends android.app.IntentService {
     private void handleUPCLookup(ResultReceiver receiver, String upc){
 
         //UPCProduct product = RestClient.getUPCService().lookupProduct(mUPCDatabaseKey, upc);
-        HashMap<Integer, UPCSearchProduct> products = RestClient.getUPCSearchService().lookupProduct("73C8EA26-5AFE-44AC-B193-ED15B574B377", upc);
+        HashMap<Integer, UPCSearchProduct> products = RestClient.getUPCSearchService().lookupProduct(mUPCSearchAccessToken, upc);
         UPCSearchProduct product = products.get(new Integer(0));
         product.setUpc(upc);
         Bundle b = new Bundle();
@@ -221,4 +221,6 @@ public class IntentService extends android.app.IntentService {
 
 
     }
+
+
 }
